@@ -11,7 +11,7 @@
       <form class="container">
         <div class="field">
           <p class="control has-icons-left">
-            <input class="input" type="email" placeholder="メールアドレス" />
+            <input class="input" type="email" placeholder="メールアドレス" v-model="email" />
             <span class="icon is-small is-left">
               <i class="fas fa-envelope"></i>
             </span>
@@ -19,7 +19,7 @@
         </div>
         <div class="field">
           <p class="control has-icons-left">
-            <input class="input" type="password" placeholder="パスワード" />
+            <input class="input" type="password" placeholder="パスワード" v-model="password"/>
             <span class="icon is-small is-left">
               <i class="fas fa-lock"></i>
             </span>
@@ -27,7 +27,9 @@
         </div>
         <div class="field">
           <p class="control">
-            <button class="button is-primary">サインアップ</button>
+            <button class="button is-primary" @click.prevent="signUp">
+							サインアップ
+						</button>
           </p>
         </div>
       </form>
@@ -36,11 +38,33 @@
 </template>
 
 <script>
+	import firebase from "firebase";
+
   export default {
-    name: "sign_up"
+		name: "sign_up",
+		data(){
+			return {
+				email: null,
+				password: null
+			}
+		},
+		methods: {
+			signUp() {
+				firebase
+				// 認証用オブジェクトの取得
+					.auth()
+				// ユーザーの新規作成処理
+				.createUserWithEmailAndPassword(this.email, this.password)
+				.then(() => {
+					// 成功したらトップページへ遷移
+					this.$router.push({ name: "home" });
+				})
+				.catch(error => {
+					// エラーがあれば表示する
+					alert(error.message);
+				});
+			}
+		}
   };
 </script>
 
-<style>
-
-</style>
