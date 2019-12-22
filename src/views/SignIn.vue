@@ -62,7 +62,7 @@ import firebase from "firebase";
 					.auth()
 					.signInWithEmailAndPassword(this.email, this.password)
 					.then(() => {
-						// home へ移動する
+						// home へ移動するコマンド
 						this.$router.push({ name: "home"})
 					})
 					.catch(error => {

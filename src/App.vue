@@ -1,11 +1,6 @@
 <template>
   <div id="app">
-    <nav
-      id="nav"
-      class="navbar has-shadow"
-      role="navigation"
-      aria-label="main navigation"
-    >
+    <nav id="nav" class="navbar has-shadow" role="navigation" aria-label="main navigation">
       <div class="container">
         <div class="navbar-brand">
           <router-link to="/" class="navbar-item">Pitmark</router-link>
@@ -23,7 +18,41 @@
           </a>
         </div>
         <div id="navbar-links" class="navbar-menu">
-          <div class="navbar-end"></div>
+          <div class="navbar-end" v-if="user">
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link">
+                <span class="icon">
+                  <i class="fas fa-user"></i>
+                </span>
+              </a>
+              <div class="navbar-dropdown is-right">
+                <a class="navbar-item" @click="signOut">
+                  <span class="icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                  </span>
+                  <span>サインアウト</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="navbar-end" v-else>
+            <div class="navbar-item">
+              <router-link :to="{ name: 'sign_in'}" class="button is-text">
+                <span class="icon">
+                  <i class="fas fa-sign-in-alt"></i>
+                </span>
+                <span>サインイン</span>
+              </router-link>
+            </div>
+            <div class="navbar-item">
+              <router-link :to="{ name: 'sign-up'}" class="button is-text">
+                <span class="icon">
+                  <i class="fas fa-user-plus"></i>
+                </span>
+                <span>サインアップ</span>
+              </router-link>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
@@ -34,11 +63,30 @@
 </template>
 
 <script>
+import firebase from "firebase";
 export default {
-
-}
+  name: "app",
+  data() {
+    return {
+      user: null
+    };
+  },
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.user = user;
+    });
+  },
+  //methodsプロパティを追加
+  methods: {
+    // サインアウト関数を追加
+    async signOut() {
+      await firebase.auth().signOut();
+      //サインアウト後にトップページに移動する
+      this.$router.push({ name: "home" });
+    }
+  }
+};
 </script>
 
 <style>
-
 </style>
