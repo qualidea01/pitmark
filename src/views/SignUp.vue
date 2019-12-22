@@ -38,7 +38,7 @@
 </template>
 
 <script>
-	import firebase from "firebase";
+import { authService } from '../services/AuthSerice';
 
   export default {
 		name: "sign_up",
@@ -50,11 +50,9 @@
 		},
 		methods: {
 			signUp() {
-				firebase
-				// 認証用オブジェクトの取得
-					.auth()
+				authService
 				// ユーザーの新規作成処理
-				.createUserWithEmailAndPassword(this.email, this.password)
+				.createUser(this.email, this.password)
 				.then(() => {
 					// 成功したらトップページへ遷移
 					this.$router.push({ name: "home" });

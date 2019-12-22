@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import { authService } from "../services/AuthSerice";
 
 export default {
   name: "home",
@@ -16,7 +16,7 @@ export default {
     }
   },
   created(){
-    firebase.auth().onAuthStateChanged(user => {
+    authService.onStateChanged(user => {
       this.user = user;
     });
   }

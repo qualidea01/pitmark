@@ -5,7 +5,7 @@ class AuthService {
 		this.auth = firebase.auth();
 	}
 
-	onStateChange(fn) {
+	onStateChanged(fn) {
 		this.auth.onAuthStateChanged(fn);
 	}
 
@@ -22,5 +22,5 @@ class AuthService {
 	}
 }
 
-const AuthService = new AuthService();
-export { AuthService };
+const authService = new AuthService();
+export { authService };

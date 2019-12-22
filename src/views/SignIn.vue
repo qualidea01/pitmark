@@ -1,43 +1,27 @@
 <template>
   <div>
-    <section class="hero is-primary">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">サインイン</h1>
-        </div>
-      </div>
-    </section>
+    <pm-page-title title="サインイン"></pm-page-title>
     <section class="section">
       <form class="container">
-        <div class="field">
-          <p class="control has-icons-left">
-            <input
-              class="input"
-              type="email"
-              placeholder="メールアドレス"
-              v-model="email"
-            />
-            <span class="icon is-small is-left">
-              <i class="fas fa-envelope"></i>
-            </span>
-          </p>
-        </div>
-        <div class="field">
-          <p class="control has-icons-left">
-            <input
-              class="input"
-              type="password"
-              placeholder="パスワード"
-              v-model="password"
-            />
-            <span class="icon is-small is-left">
-              <i class="fas fa-lock"></i>
-            </span>
-          </p>
-        </div>
+        <!-- メールアドレスの入力欄としてテキストフィールドコンポーネントを使用 -->
+        <pm-text-field
+          type="email"
+          placeholder="メールアドレス"
+          icon="envelope"
+          v-model="email"
+        ></pm-text-field>
+        <!-- パスワードの入力欄としてテキストフィールドコンポーネントを使用 -->
+        <pm-text-field
+          type="password"
+          placeholder="パスワード"
+          icon="lock"
+          v-model="password"
+        ></pm-text-field>
         <div class="field is-grouped">
           <div class="control">
-            <button class="button is-primary" @click.prevent="signIn">サインイン</button>
+            <button class="button is-primary" @click.prevent="signIn">
+              サインイン
+            </button>
           </div>
         </div>
       </form>
@@ -46,29 +30,32 @@
 </template>
 
 <script>
-import firebase from "firebase";
+  import pmPageTitle from "@/components/PageTitle";
+  // テキストフィールドコンポーネントをインポート
+  import pmTextField from "@/components/TextField";
+  import { authService } from "@/services/AuthService";
 
   export default {
     name: "sign_in",
+    // テキストフィールドコンポーネントの使用を宣言
+    components: { pmPageTitle, pmTextField },
     data() {
       return {
         email: null,
         password: null
       };
-		},
-		methods: {
-			signIn() {
-				firebase
-					.auth()
-					.signInWithEmailAndPassword(this.email, this.password)
-					.then(() => {
-						// home へ移動するコマンド
-						this.$router.push({ name: "home"})
-					})
-					.catch(error => {
-						alert(error.message);
-					});
-			}
-		}
+    },
+    methods: {
+      signIn() {
+        authService
+          .signIn(this.email, this.password)
+          .then(() => {
+            this.$router.push({ name: "home" });
+          })
+          .catch(error => {
+            alert(error.message);
+          });
+      }
+    }
   };
 </script>
